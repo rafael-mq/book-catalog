@@ -19,6 +19,7 @@
 </template>
 
 <script>
+import BookApi from "../services/bookApi";
 export default {
   name: "AddBook",
   data() {
@@ -42,16 +43,16 @@ export default {
         subject: this.subject
       }
       if (this.bookData) {
-        formBook._id = this.bookData._id;
-        alert("update book: " + JSON.stringify(formBook, null, 2));
-        // this.$emit("update-book", formBook);
         // chama a api
+        BookApi.updateBook(this.bookData._id, formBook)
+        .then(() => this.$router.push({name: "Home"}))
+        .catch(e => alert("Failed to edit book.\n" + e))
       } else {
-        alert("add book: " + JSON.stringify(formBook, null, 2));
-        // this.$emit("add-book", formBook);
         // chama a api
+        BookApi.createBook(formBook)
+        .then(() => this.$router.push({name: "Home"}))
+        .catch(e => alert("Failed to register book.\n" + e))
       }
-      this.$router.push({name: "Home"});
     }
   },
   created() {
